@@ -2,7 +2,7 @@
 
 Implemented firebase phone authentication using Provider state management and MVVM architecture pattern.
 
-![](https://github.com/arunsacharyadev/firebase_phone_authentication/tree/main/assets/gifs/working_application.gif)
+![working application](https://github.com/arunsacharyadev/firebase_phone_authentication/blob/main/assets/gifs/working_application.gif)
 
 ## License
 
