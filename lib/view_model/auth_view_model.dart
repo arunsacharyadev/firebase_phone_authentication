@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
 import '../services/auth_service.dart';
@@ -12,6 +12,8 @@ class AuthViewModel extends ChangeNotifier {
   String? phoneNumber;
   String? verifyOtpErrorText;
   final ValueNotifier<bool> isLoading = ValueNotifier(false);
+  final TextEditingController phoneNumberController = TextEditingController();
+  final GlobalKey<FormState> sendOtpScreenformKey = GlobalKey<FormState>();
 
   Future<void> sendOtp(BuildContext context, AuthViewModel authViewModel,
       {required String? phoneNumber}) async {
@@ -20,9 +22,9 @@ class AuthViewModel extends ChangeNotifier {
     await AuthService.sendOtp(
       phoneNumber: this.phoneNumber,
       verificationFailed: (firebaseAuthException) {
-        debugPrint(
+        Utils.printf(
             "firebaseAuthException.code:\t${firebaseAuthException.code}");
-        debugPrint(
+        Utils.printf(
             "firebaseAuthException.message:\t${firebaseAuthException.message}");
         isLoading.value = false;
         String snackBarMessage = '';
@@ -51,7 +53,7 @@ class AuthViewModel extends ChangeNotifier {
         isLoading.value = false;
         Navigator.push(
           context,
-          MaterialPageRoute(
+          CupertinoPageRoute(
             builder: (context) => ChangeNotifierProvider<AuthViewModel>.value(
               value: authViewModel,
               builder: (context, child) => const VerifyOtpScreen(),
@@ -73,9 +75,10 @@ class AuthViewModel extends ChangeNotifier {
       smsCode: smsCode,
       errorMessage: (code, message) {
         isLoading.value = false;
+        Utils.printf("$code: $message");
         String snackBarMessage = '';
         switch (code) {
-          case '':
+          case 'invalid-verification-code':
             snackBarMessage = 'enter the valid otp.';
             break;
           default:
@@ -90,9 +93,39 @@ class AuthViewModel extends ChangeNotifier {
       if (!context.mounted) return;
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => const LandingScreen()),
+        CupertinoPageRoute(builder: (context) => const LandingScreen()),
         (route) => false,
       );
     }
   }
+
+  void sendOtpOnPressed(BuildContext context) async {
+    if (sendOtpScreenformKey.currentState!.validate()) {
+      await sendOtp(
+        context,
+        this,
+        phoneNumber: phoneNumberController.text,
+      );
+    }
+  }
+
+  String? phoneNumberFieldValidator(String? input) {
+    if (input!.isEmpty) {
+      return "Enter phone number";
+    } else if (input.length != 10) {
+      return "Enter 10 digit phone number";
+    }
+    return null;
+  }
+
+  String? OtpFieldValidator(String? input) {
+    if (input!.isEmpty) {
+      return "Enter 6 digit otp";
+    } else if (input.length != 6) {
+      return "Enter 6 digit otp";
+    }
+    return null;
+  }
+
+  void clearPhoneNumberController() => phoneNumberController.clear();
 }

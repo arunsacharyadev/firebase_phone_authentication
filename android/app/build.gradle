@@ -23,9 +23,13 @@ if (flutterVersionName == null) {
 }
 
 android {
+    signingConfigs {
+        release {
+        }
+    }
     namespace "com.example.firebase_phone_authentication"
     compileSdkVersion flutter.compileSdkVersion
-//    ndkVersion flutter.ndkVersion
+    ndkVersion flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-import '../utils/utils.dart';
+import '../utils/constants.dart';
 import '../view_model/splash_view_model.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -12,13 +12,14 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  late final SplashViewModel _splashViewModel;
+
   @override
   void initState() {
-    _splashViewModel.load(context);
     super.initState();
+    _splashViewModel = SplashViewModel();
+    _splashViewModel.load(context);
   }
-
-  final SplashViewModel _splashViewModel = SplashViewModel();
 
   @override
   Widget build(BuildContext context) {

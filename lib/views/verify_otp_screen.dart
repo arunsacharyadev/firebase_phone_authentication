@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 
-import '../utils/constants.dart';
+import '../utils/utils.dart';
 import '../view_model/auth_view_model.dart';
 
 class VerifyOtpScreen extends StatefulWidget {
@@ -76,14 +76,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                     length: 6,
                     showCursor: true,
                     controller: _otpController,
-                    validator: (val) {
-                      if (val!.isEmpty) {
-                        return "Enter 6 digit otp";
-                      } else if (val.length != 6) {
-                        return "Enter 6 digit otp";
-                      }
-                      return null;
-                    },
+                    validator: authViewModel.OtpFieldValidator,
                   ),
                 ),
                 const SizedBox(height: 20),

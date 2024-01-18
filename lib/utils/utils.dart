@@ -9,10 +9,19 @@ class Utils {
     FocusScope.of(context).requestFocus(next);
   }
 
+  static printf(String? message) {
+    debugPrint(message);
+    /*if (Foundation.kDebugMode) {
+      debugPrint(message);
+    } else if (Foundation.kReleaseMode) {
+      print(message);
+    }*/
+  }
+
   static void hideKeyBoard() => FocusManager.instance.primaryFocus?.unfocus();
 
-  static void Function(PointerDownEvent)? hideKeyBoardOnTapOutside() =>
-      (PointerDownEvent pointerDownEvent) => hideKeyBoard();
+  static void hideKeyBoardOnTapOutside(PointerDownEvent pointerDownEvent) =>
+      hideKeyBoard();
 
   static void displaySnackBar(BuildContext context,
       {required String contentText}) {

@@ -10,12 +10,12 @@ class LandingScreen extends StatefulWidget {
 }
 
 class _LandingScreenState extends State<LandingScreen> {
+  final LandingViewModel _landingViewModel = LandingViewModel();
+
   @override
   void initState() {
     super.initState();
   }
-
-  final LandingViewModel _landingViewModel = LandingViewModel();
 
   @override
   Widget build(BuildContext context) {

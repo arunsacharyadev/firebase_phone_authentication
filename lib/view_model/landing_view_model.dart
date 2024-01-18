@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
 import '../services/auth_service.dart';
@@ -11,7 +11,7 @@ class LandingViewModel extends ChangeNotifier {
     if (!context.mounted) return;
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(
+      CupertinoPageRoute(
         builder: (context) => ChangeNotifierProvider(
           create: (context) => AuthViewModel(),
           builder: (context, child) => const SendOtpScreen(),

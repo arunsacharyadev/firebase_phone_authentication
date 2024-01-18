@@ -13,13 +13,13 @@ class SendOtpScreen extends StatefulWidget {
 }
 
 class _SendOtpScreenState extends State<SendOtpScreen> {
+  late final AuthViewModel _authViewModel;
+
   @override
   void initState() {
     super.initState();
+    _authViewModel = Provider.of<AuthViewModel>(context, listen: false);
   }
-
-  final TextEditingController _phoneNumberController = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -58,10 +58,10 @@ class _SendOtpScreenState extends State<SendOtpScreen> {
                   ),
                   const SizedBox(height: 30),
                   Form(
-                    key: _formKey,
+                    key: authViewModel.sendOtpScreenformKey,
                     child: TextFormField(
-                      controller: _phoneNumberController,
-                      onTapOutside: Utils.hideKeyBoardOnTapOutside(),
+                      controller: authViewModel.phoneNumberController,
+                      onTapOutside: Utils.hideKeyBoardOnTapOutside,
                       keyboardType: TextInputType.phone,
                       maxLength: 10,
                       maxLengthEnforcement: MaxLengthEnforcement.none,
@@ -97,14 +97,7 @@ class _SendOtpScreenState extends State<SendOtpScreen> {
                         hintText: "10 digit phone number",
                         counterText: '',
                       ),
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return "Enter phone number";
-                        } else if (val.length != 10) {
-                          return "Enter 10 digit phone number";
-                        }
-                        return null;
-                      },
+                      validator: authViewModel.phoneNumberFieldValidator,
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -124,15 +117,8 @@ class _SendOtpScreenState extends State<SendOtpScreen> {
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               )),
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              await authViewModel.sendOtp(
-                                context,
-                                authViewModel,
-                                phoneNumber: _phoneNumberController.text,
-                              );
-                            }
-                          },
+                          onPressed: () =>
+                              authViewModel.sendOtpOnPressed(context),
                           child: value
                               ? const CircularProgressIndicator(
                                   valueColor:
@@ -154,7 +140,7 @@ class _SendOtpScreenState extends State<SendOtpScreen> {
 
   @override
   void dispose() {
+    _authViewModel.clearPhoneNumberController();
     super.dispose();
-    _phoneNumberController.dispose();
   }
 }
